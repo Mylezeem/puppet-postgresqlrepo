@@ -9,8 +9,12 @@
 #   Possible value: 8.4, 9.0, 9.1, 9.2, 9.3
 #   Default: 9.3
 #
-# [*source*]
-#   (boolean) Should the srpms repository should be enabled.
+# [*repo_enable*]
+#   (boolean) Should the main repo be enabled
+#   Default: true
+#
+# [*repo_source_enable*]
+#   (boolean) Should the srpms repo should be enabled.
 #   Default: false
 #
 # === Examples
@@ -20,8 +24,8 @@
 #    or
 #
 #  class { 'postgresqlrepo' :
-#   version => '9.1',
-#   source  => true,
+#   version             => '9.1',
+#   repo_source_enable  => true,
 #  }
 #
 # === Authors
@@ -33,9 +37,12 @@
 # Copyright 2014 Yanis Guenane
 #
 class postgresqlrepo (
-  $version        = '9.3',
-  $source         = false,
+  $version            = '9.3',
+  $repo_enable        = true,
+  $repo_source_enable = false,
 ) {
+
+  include stdlib
 
   if ! ($::operatingsystem in ['RedHat', 'Fedora', 'CentOS']) {
     fail ("This module does not support your operating system : ${::operatingsystem}")
@@ -51,17 +58,19 @@ class postgresqlrepo (
   }
 
   yumrepo { "pgdg${version}" :
+    descr    => "PostgreSQL ${version} \$releasever - \$basearch",
     baseurl  => "http://yum.postgresql.org/${version}/${os}/${os_shortname}-\$releasever-\$basearch",
     gpgkey   => 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-PGDG-93',
     gpgcheck => 1,
-    enabled  => 1,
+    enabled  => bool2num($repo_enable),
   }
 
   yumrepo { "pgdg${version}-source" :
+    descr    => "PostgreSQL ${version} \$releasever - \$basearch - Source",
     baseurl  => "http://yum.postgresql.org/srpms/${version}/${os}/${os_shortname}-\$releasever-\$basearch",
     gpgkey   => 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-PGDG-93',
     gpgcheck => 1,
-    enabled  => $source,
+    enabled  => bool2num($repo_source_enable),
   }
 
 }
