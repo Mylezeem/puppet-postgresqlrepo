@@ -44,6 +44,8 @@ class postgresqlrepo (
 
   include stdlib
 
+  $version_alt = regsubst($version, '^(\d+)\.(\d+)$', '\1\2')
+
   if ! ($::operatingsystem in ['RedHat', 'Fedora', 'CentOS']) {
     fail ("This module does not support your operating system : ${::operatingsystem}")
   }
@@ -57,18 +59,18 @@ class postgresqlrepo (
     'Fedora'        => 'fedora',
   }
 
-  yumrepo { "pgdg${version}" :
+  yumrepo { "pgdg${version_alt}" :
     descr    => "PostgreSQL ${version} \$releasever - \$basearch",
     baseurl  => "http://yum.postgresql.org/${version}/${os}/${os_shortname}-\$releasever-\$basearch",
-    gpgkey   => 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-PGDG-93',
+    gpgkey   => "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-PGDG-${version_alt}",
     gpgcheck => 1,
     enabled  => bool2num($repo_enable),
   }
 
-  yumrepo { "pgdg${version}-source" :
+  yumrepo { "pgdg${version_alt}-source" :
     descr    => "PostgreSQL ${version} \$releasever - \$basearch - Source",
     baseurl  => "http://yum.postgresql.org/srpms/${version}/${os}/${os_shortname}-\$releasever-\$basearch",
-    gpgkey   => 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-PGDG-93',
+    gpgkey   => "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-PGDG-${version_alt}",
     gpgcheck => 1,
     enabled  => bool2num($repo_source_enable),
   }
