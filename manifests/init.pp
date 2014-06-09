@@ -51,12 +51,12 @@ class postgresqlrepo (
   }
 
   $os = $::operatingsystem ? {
-    /RedHat|CentOS/ => 'redhat',
     'Fedora'        => 'fedora',
+    /RedHat|CentOS/ => 'redhat',
   }
   $os_shortname = $::operatingsystem ? {
-    /RedHat|CentOS/ => 'rhel',
     'Fedora'        => 'fedora',
+    /RedHat|CentOS/ => 'rhel',
   }
 
   yumrepo { "pgdg${version_alt}" :

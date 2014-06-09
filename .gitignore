@@ -1,0 +1,4 @@
+spec/fixtures/*
+.gemfile.lock
+*.swp
+pkg/*
