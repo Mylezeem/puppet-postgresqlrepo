@@ -1,4 +1,4 @@
-name    'puppet-postgresqlrepo'
+name    'yguenane-postgresqlrepo'
 version '0.1.0'
 source 'https://github.com/Mylezeem/puppet-postgresqlrepo'
 author 'Yanis Guenane'

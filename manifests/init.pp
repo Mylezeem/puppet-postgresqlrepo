@@ -75,4 +75,17 @@ class postgresqlrepo (
     enabled  => bool2num($repo_source_enable),
   }
 
+  file {"/etc/pki/rpm-gpg/RPM-GPG-KEY-PGDG-${version_alt}" :
+    ensure => present,
+    owner  => 'root',
+    group  => 'root',
+    mode   => '0644',
+    source => "puppet:///modules/postgresqlrepo/RPM-GPG-KEY-PGDG-${version_alt}",
+  }
+
+  postgresqlrepo::rpm_gpg_key {"PGDG-${version_alt}":
+    path   => "/etc/pki/rpm-gpg/RPM-GPG-KEY-PGDG-${version_alt}",
+    before => Yumrepo["pgdg${version_alt}", "pgdg${version_alt}-source"],
+  }
+
 }
