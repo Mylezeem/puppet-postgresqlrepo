@@ -9,3 +9,4 @@ project_page 'https://github.com/Mylezeem/puppet-postgresqlrepo'
 
 ## Add dependencies, if any:
 dependency 'puppetlabs/stdlib', '= 3.2.1'
+dependency 'puppetlabs/apt', '= 1.7.0'
